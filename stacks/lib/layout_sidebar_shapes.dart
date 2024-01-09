@@ -62,7 +62,6 @@ class ShapeListWidget extends StatelessWidget {
               if (isSelected) {
                 // Si ya está seleccionado, deseleccionar
                 appData.setShapeSelected(-1);
-                
               } else {
                 // Si no está seleccionado, seleccionar
                 appData.setShapeSelected(index);

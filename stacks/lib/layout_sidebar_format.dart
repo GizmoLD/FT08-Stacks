@@ -19,6 +19,9 @@ class LayoutSidebarFormatState extends State<LayoutSidebarFormat> {
         const TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
     TextStyle font = const TextStyle(fontSize: 12, fontWeight: FontWeight.w400);
 
+    GlobalKey<CDKButtonColorState> colorKey = GlobalKey<CDKButtonColorState>();
+    final GlobalKey<CDKDialogPopoverArrowedState> popoverKey = GlobalKey();
+
     return Container(
       padding: const EdgeInsets.all(4.0),
       child: LayoutBuilder(
@@ -59,6 +62,35 @@ class LayoutSidebarFormatState extends State<LayoutSidebarFormat> {
                         width: labelsWidth,
                         child: Text("Stroke color:", style: font)),
                     const SizedBox(width: 4),
+                    ValueListenableBuilder<Color>(
+                        valueListenable: appData.valueShapeColorNotifier,
+                        builder: (context, value, child) {
+                          return CDKButtonColor(
+                              key: colorKey,
+                              color: appData.valueShapeColorNotifier.value,
+                              onPressed: () {
+                                CDKDialogsManager.showPopoverArrowed(
+                                    key: popoverKey,
+                                    context: context,
+                                    anchorKey: colorKey,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ValueListenableBuilder<Color>(
+                                        valueListenable:
+                                            appData.valueShapeColorNotifier,
+                                        builder: (context, value, child) {
+                                          return CDKPickerColor(
+                                            color: value,
+                                            onChanged: (color) {
+                                              appData.valueShapeColorNotifier
+                                                  .value = color;
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ));
+                              });
+                        })
                   ],
                 ),
                 const SizedBox(height: 16),

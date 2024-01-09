@@ -45,4 +45,39 @@ class Shape {
     return Size(width, height);
   }
 
+  double getCanvasOccupiedSize(Size canvasSize) {
+    Size boundingBoxSize = getBoundingBoxSize();
+
+    // Define un tamaño de referencia constante
+    double referenceSize = 100.0;
+
+    // Calcula el tamaño ocupado en el canvas en relación con el tamaño de referencia
+    double canvasOccupiedSize =
+        (boundingBoxSize.width * boundingBoxSize.height) /
+            (referenceSize * referenceSize);
+
+    return canvasOccupiedSize;
+  }
+
+  void normalizeSize(Size canvasSize) {
+    Size boundingBoxSize = getBoundingBoxSize();
+
+    // Verifica si la bounding box tiene dimensiones no nulas
+    if (boundingBoxSize.width > 0 && boundingBoxSize.height > 0) {
+      // Define el tamaño deseado en el canvas
+      double desiredWidth = canvasSize.width / 2;
+      double desiredHeight = canvasSize.height / 2;
+
+      // Calcula los factores de escala necesarios para normalizar el tamaño
+      double scaleX = desiredWidth / boundingBoxSize.width;
+      double scaleY = desiredHeight / boundingBoxSize.height;
+
+      // Aplica la transformación de escala a cada vértice y la posición
+      for (int i = 0; i < vertices.length; i++) {
+        vertices[i] = Offset(vertices[i].dx * scaleX, vertices[i].dy * scaleY);
+      }
+
+      position = Offset(position.dx * scaleX, position.dy * scaleY);
+    }
+  }
 }

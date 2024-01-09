@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cupertino_desktop_kit/cdk.dart';
 import 'app_click_selector.dart';
 import 'app_data_actions.dart';
 import 'util_shape.dart';
@@ -14,6 +15,10 @@ class AppData with ChangeNotifier {
   Size docSize = const Size(500, 400);
   String toolSelected = "shape_drawing";
   Shape newShape = Shape();
+  ValueNotifier<Color> valueShapeColorNotifier = ValueNotifier(CDKTheme.black);
+  ValueNotifier<Color> valuebackgroundColorNotifier =
+      ValueNotifier(CDKTheme.transparent);
+
   List<Shape> shapesList = [];
   int shapeSelected = -1;
 
@@ -82,6 +87,7 @@ class AppData with ChangeNotifier {
   }
 
   void addNewShape(Offset position) {
+    newShape.strokeColor = valueShapeColorNotifier.value;
     newShape.setPosition(position);
     newShape.addPoint(const Offset(0, 0));
     notifyListeners();
@@ -104,6 +110,10 @@ class AppData with ChangeNotifier {
 
   void setNewShapeStrokeWidth(double value) {
     newShape.setStrokeWidth(value);
+    notifyListeners();
+  }
+
+  void setBackgroundColor() {
     notifyListeners();
   }
 }

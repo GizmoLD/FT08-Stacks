@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_desktop_kit/cdk.dart';
 import 'app_data.dart';
 import 'util_shape.dart';
+import 'dart:math';
 
 class LayoutDesignPainter extends CustomPainter {
   final AppData appData;
@@ -149,7 +150,7 @@ class LayoutDesignPainter extends CustomPainter {
   static void paintShape(Canvas canvas, Shape shape) {
     if (shape.vertices.isNotEmpty) {
       Paint paint = Paint();
-      paint.color = CDKTheme.black;
+      paint.color = shape.strokeColor;
       paint.style = PaintingStyle.stroke;
       paint.strokeWidth = shape.strokeWidth;
       double x = shape.position.dx + shape.vertices[0].dx;
@@ -204,6 +205,8 @@ class LayoutDesignPainter extends CustomPainter {
     }
 
     // Dibuixa el fons del document aquí ...
+    canvas.drawRect(Rect.fromLTWH(0, 0, docW, docH),
+        Paint()..color = appData.valuebackgroundColorNotifier.value);
 
     // Dibuixa la llista de poligons (segons correspon, relatiu a la seva posició)
     if (appData.shapesList.isNotEmpty) {
