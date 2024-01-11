@@ -63,38 +63,46 @@ class LayoutSidebarFormatState extends State<LayoutSidebarFormat> {
                         child: Text("Stroke color:", style: font)),
                     const SizedBox(width: 4),
                     ValueListenableBuilder<Color>(
-                        valueListenable: appData.valueShapeColorNotifier,
-                        builder: (context, value, child) {
-                          return CDKButtonColor(
-                              key: colorKey,
-                              color: appData.getSelectedShapeColor(),
-                              //color: Color.fromRGBO(1, 1, 1, 1),
-                              onPressed: () {
-                                CDKDialogsManager.showPopoverArrowed(
-                                  key: popoverKey,
-                                  context: context,
-                                  anchorKey: colorKey,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ValueListenableBuilder<Color>(
-                                      valueListenable:
-                                          appData.valueShapeColorNotifier,
-                                      builder: (context, value, child) {
-                                        return CDKPickerColor(
-                                          color: value,
-                                          onChanged: (color) {
-                                            appData.valueShapeColorNotifier
-                                                .value = color;
-                                            appData.setShapeColor(
-                                                color); // Nuevo código aquí
-                                          },
-                                        );
+                      valueListenable: appData.valueShapeColorNotifier,
+                      builder: (context, value, child) {
+                        Color initialColor =
+                            appData.toolSelected == "pointer_shapes"
+                                ? appData.getSelectedShapeColor()
+                                : value;
+
+                        return CDKButtonColor(
+                          key: colorKey,
+                          color: initialColor,
+                          onPressed: () {
+                            CDKDialogsManager.showPopoverArrowed(
+                              key: popoverKey,
+                              context: context,
+                              anchorKey: colorKey,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ValueListenableBuilder<Color>(
+                                  valueListenable:
+                                      appData.valueShapeColorNotifier,
+                                  builder: (context, value, child) {
+                                    return CDKPickerColor(
+                                      color: value,
+                                      onChanged: (color) {
+                                        appData.valueShapeColorNotifier.value =
+                                            color;
+                                        if (appData.toolSelected ==
+                                            "pointer_shapes") {
+                                          appData.setShapeColor(color);
+                                        }
                                       },
-                                    ),
-                                  ),
-                                );
-                              });
-                        })
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    )
                   ],
                 ),
                 const SizedBox(height: 16),
