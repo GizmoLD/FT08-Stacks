@@ -10,6 +10,10 @@ class Shape {
 
   Shape();
 
+  Color getColor() {
+    return strokeColor;
+  }
+
   void setPosition(Offset newPosition) {
     position = newPosition;
   }

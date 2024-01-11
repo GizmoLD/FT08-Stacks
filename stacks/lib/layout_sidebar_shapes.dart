@@ -52,7 +52,7 @@ class ShapeListWidget extends StatelessWidget {
           // Crear una instancia de LayoutDesignPainter para cada forma
           LayoutDesignPainter layoutPainter = LayoutDesignPainter(
             appData: appData,
-            theme: CDKTheme(), // Asegúrate de tener un tema válido aquí
+            theme: CDKTheme(),
             centerX: 0,
             centerY: 0,
           );

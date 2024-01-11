@@ -1,4 +1,3 @@
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:editor_base/util_shape.dart';
 import 'package:flutter_cupertino_desktop_kit/cdk_theme.dart';
@@ -41,7 +40,7 @@ class CustomShapePainter extends CustomPainter {
 
     // Configura el pintor según el tema y otras propiedades
     Paint paint = Paint()
-      ..color = theme.colorText
+      ..color = shape.getColor()
       ..style = PaintingStyle.stroke
       ..strokeWidth = shape.strokeWidth;
 

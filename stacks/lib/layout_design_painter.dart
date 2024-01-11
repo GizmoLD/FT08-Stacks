@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_desktop_kit/cdk.dart';
 import 'app_data.dart';
 import 'util_shape.dart';
-import 'dart:math';
 
 class LayoutDesignPainter extends CustomPainter {
   final AppData appData;
