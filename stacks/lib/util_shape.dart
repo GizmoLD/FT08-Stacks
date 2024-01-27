@@ -14,6 +14,14 @@ class Shape {
     return strokeColor;
   }
 
+  void setPositionX(double x) {
+    position = Offset(x, position.dy);
+  }
+
+  void setPositionY(double y) {
+    position = Offset(position.dy, y);
+  }
+
   void setPosition(Offset newPosition) {
     position = newPosition;
   }
