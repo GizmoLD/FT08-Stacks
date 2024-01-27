@@ -125,9 +125,15 @@ class AppData with ChangeNotifier {
     if (shapeSelected >= 0 && shapeSelected < shapesList.length) {
       return shapesList[shapeSelected].strokeColor;
     } else {
-      // Puedes devolver un color predeterminado o transparente si no hay forma seleccionada
       return Colors.transparent;
     }
+  }
+
+  Shape? getSelectedShape() {
+    if (shapeSelected >= 0 && shapeSelected < shapesList.length) {
+      return shapesList[shapeSelected];
+    }
+    return null;
   }
 
   void setBackgroundColor() {
