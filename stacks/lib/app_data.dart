@@ -139,4 +139,18 @@ class AppData with ChangeNotifier {
   void setBackgroundColor() {
     notifyListeners();
   }
+
+  void setSelectedShapePositionX(double x) {
+    if (shapeSelected != -1) {
+      getSelectedShape()?.setPositionX(x);
+      notifyListeners(); // Notifica a los escuchadores sobre el cambio
+    }
+  }
+
+  void setSelectedShapePositionY(double y) {
+    if (shapeSelected != -1) {
+      getSelectedShape()?.setPositionY(y);
+      notifyListeners(); // Notifica a los escuchadores sobre el cambio
+    }
+  }
 }

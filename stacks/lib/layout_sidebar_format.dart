@@ -44,7 +44,6 @@ class LayoutSidebarFormat extends StatelessWidget {
   }
 
   Widget _buildStrokeWidthRow(double labelsWidth, AppData appData) {
-    //double strokeWidth = appData.getSelectedShape()?.strokeWidth ?? 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -54,9 +53,7 @@ class LayoutSidebarFormat extends StatelessWidget {
           alignment: Alignment.centerLeft,
           width: 80,
           child: CDKFieldNumeric(
-            //value: appData.newShape?.strokeWidth ?? 0.0,
             value: appData.newShape.strokeWidth,
-            //value: strokeWidth,
             min: 0.01,
             max: 100,
             units: "px",
@@ -93,8 +90,7 @@ class LayoutSidebarFormat extends StatelessWidget {
             //    appData.getSelectedShape()?.position.dx;
             //  }
             //}
-            onValueChanged: (value) =>
-                appData.getSelectedShape()?.setPositionX(value),
+            onValueChanged: (value) => appData.setSelectedShapePositionX(value),
           ),
         ),
       ],
@@ -125,8 +121,7 @@ class LayoutSidebarFormat extends StatelessWidget {
             //    appData.getSelectedShape()?.position.dy;
             //  }
             //}
-            onValueChanged: (value) =>
-                appData.getSelectedShape()?.setPositionY(value),
+            onValueChanged: (value) => appData.setSelectedShapePositionY(value),
           ),
         ),
       ],

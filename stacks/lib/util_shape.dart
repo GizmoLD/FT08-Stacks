@@ -19,7 +19,7 @@ class Shape {
   }
 
   void setPositionY(double y) {
-    position = Offset(position.dy, y);
+    position = Offset(position.dx, y);
   }
 
   void setPosition(Offset newPosition) {
