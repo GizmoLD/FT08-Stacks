@@ -8,7 +8,6 @@ class AppData with ChangeNotifier {
   // Access appData globaly with:
   // AppData appData = Provider.of<AppData>(context);
   // AppData appData = Provider.of<AppData>(context, listen: false)
-
   ActionManager actionManager = ActionManager();
   bool isAltOptionKeyPressed = false;
   double zoom = 95;
@@ -21,6 +20,7 @@ class AppData with ChangeNotifier {
 
   List<Shape> shapesList = [];
   int shapeSelected = -1;
+  int shapeSelectedPrevious = -1;
 
   bool readyExample = false;
   late dynamic dataExample;
@@ -80,8 +80,13 @@ class AppData with ChangeNotifier {
     notifyListeners();
   }
 
-  void selectShapeAtPosition(Offset docPosition, Offset localPosition,
+// antes solo era void
+  Future<void> selectShapeAtPosition(Offset docPosition, Offset localPosition,
       BoxConstraints constraints, Offset center) async {
+    //
+    //shapeSelectedPrevious = shapeSelected;
+    //shapeSelected = -1;
+    //
     setShapeSelected(await AppClickSelector.selectShapeAtPosition(
         this, docPosition, localPosition, constraints, center));
   }
@@ -143,14 +148,28 @@ class AppData with ChangeNotifier {
   void setSelectedShapePositionX(double x) {
     if (shapeSelected != -1) {
       getSelectedShape()?.setPositionX(x);
-      notifyListeners(); // Notifica a los escuchadores sobre el cambio
+      notifyListeners();
     }
   }
 
   void setSelectedShapePositionY(double y) {
     if (shapeSelected != -1) {
       getSelectedShape()?.setPositionY(y);
-      notifyListeners(); // Notifica a los escuchadores sobre el cambio
+      notifyListeners();
+    }
+  }
+
+  void setSelectedShapePosition(Offset position) {
+    if (shapeSelected != -1) {
+      getSelectedShape()?.setPosition(position);
+      notifyListeners();
+    }
+  }
+
+  void updateShapePosition(Offset position) {
+    if (shapeSelected != -1) {
+      getSelectedShape()?.setPosition(position);
+      notifyListeners();
     }
   }
 }

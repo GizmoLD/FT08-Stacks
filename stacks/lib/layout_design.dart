@@ -20,6 +20,8 @@ class LayoutDesignState extends State<LayoutDesign> {
   Offset _scrollCenter = const Offset(0, 0);
   bool _isMouseButtonPressed = false;
   final FocusNode _focusNode = FocusNode();
+  Offset _dragStartPosition = Offset.zero;
+  Offset _dragStartOffset = Offset.zero;
 
   @override
   void initState() {
@@ -131,7 +133,7 @@ class LayoutDesignState extends State<LayoutDesign> {
               child: MouseRegion(
                   cursor: cursorShown,
                   child: Listener(
-                      onPointerDown: (event) {
+                      onPointerDown: (event) async {
                         _focusNode.requestFocus();
                         _isMouseButtonPressed = true;
                         Size docSize =
@@ -143,8 +145,15 @@ class LayoutDesignState extends State<LayoutDesign> {
                             docSize,
                             _scrollCenter);
                         if (appData.toolSelected == "pointer_shapes") {
-                          appData.selectShapeAtPosition(docPosition,
+                          await appData.selectShapeAtPosition(docPosition,
                               event.localPosition, constraints, _scrollCenter);
+                          if (appData.shapeSelected != -1) {
+                            _dragStartPosition = appData
+                                .shapesList[appData.shapeSelected].position;
+                            _dragStartOffset = docPosition - _dragStartPosition;
+                          }
+                          //appData.selectShapeAtPosition(docPosition,
+                          //    event.localPosition, constraints, _scrollCenter);
                         }
                         if (appData.toolSelected == "shape_drawing") {
                           appData.addNewShape(docPosition);
@@ -162,6 +171,21 @@ class LayoutDesignState extends State<LayoutDesign> {
                                 constraints,
                                 docSize,
                                 _scrollCenter));
+                          }
+                          if (appData.toolSelected == "pointer_shapes" &&
+                              appData.shapeSelected != -1) {
+                            Size docSize = Size(
+                                appData.docSize.width, appData.docSize.height);
+                            Offset docPosition = _getDocPosition(
+                                event.localPosition,
+                                appData.zoom,
+                                constraints,
+                                docSize,
+                                _scrollCenter);
+
+                            Offset newShapePosition =
+                                docPosition - _dragStartOffset;
+                            appData.updateShapePosition(newShapePosition);
                           }
                         }
                         if (_isMouseButtonPressed &&
@@ -181,6 +205,23 @@ class LayoutDesignState extends State<LayoutDesign> {
                         if (appData.toolSelected == "shape_drawing") {
                           appData.addNewShapeToShapesList();
                         }
+                        if (appData.toolSelected == "pointer_shapes" &&
+                            appData.shapeSelected != -1) {
+                          Size docSize = Size(
+                              appData.docSize.width, appData.docSize.height);
+                          Offset docPosition = _getDocPosition(
+                              event.localPosition,
+                              appData.zoom,
+                              constraints,
+                              docSize,
+                              _scrollCenter);
+                          Offset newShapePosition =
+                              docPosition - _dragStartOffset;
+                          if (_dragStartPosition != newShapePosition) {
+                            appData.updateShapePosition(newShapePosition);
+                          }
+                        }
+
                         setState(() {});
                       },
                       onPointerSignal: (pointerSignal) {
