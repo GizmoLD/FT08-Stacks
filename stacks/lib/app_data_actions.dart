@@ -13,6 +13,7 @@ abstract class Action {
 class ActionManager {
   List<Action> actions = [];
   int currentIndex = -1;
+  //AppData appData = AppData();
 
   void register(Action action) {
     // Elimina les accions que estan després de l'índex actual
@@ -35,6 +36,15 @@ class ActionManager {
     if (currentIndex < actions.length - 1) {
       currentIndex++;
       actions[currentIndex].redo();
+    }
+  }
+
+  void copy() {
+    AppData appData = AppData();
+    if (appData.shapeSelected >= 0) {
+      appData.copyShape = appData.shapesList[appData.shapeSelected];
+      appData.copyToClipboard();
+      appData.forceNotifyListeners();
     }
   }
 }

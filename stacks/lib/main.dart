@@ -29,6 +29,8 @@ void main() async {
           (Platform.isWindows && event.isControlPressed);
       bool isShiftPressed = event.isShiftPressed;
       bool isZPressed = event.logicalKey == LogicalKeyboardKey.keyZ;
+      bool isCPressed = event.logicalKey == LogicalKeyboardKey.keyC;
+      bool isVPressed = event.logicalKey == LogicalKeyboardKey.keyV;
 
       if (event is RawKeyDownEvent) {
         if (isControlPressed && isZPressed && !isShiftPressed) {
@@ -36,6 +38,12 @@ void main() async {
           return KeyEventResult.handled;
         } else if (isControlPressed && isShiftPressed && isZPressed) {
           appData.actionManager.redo();
+          return KeyEventResult.handled;
+        } else if (isCPressed && isControlPressed) {
+          appData.copyToClipboard();
+          return KeyEventResult.handled;
+        } else if (isVPressed && isControlPressed) {
+          appData.pasteFromClipboard();
           return KeyEventResult.handled;
         }
         if (event.logicalKey == LogicalKeyboardKey.altLeft) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_desktop_kit/cdk.dart';
 import 'app_click_selector.dart';
 import 'app_data_actions.dart';
@@ -14,6 +15,7 @@ class AppData with ChangeNotifier {
   Size docSize = const Size(500, 400);
   String toolSelected = "shape_drawing";
   Shape newShape = Shape();
+  Shape copyShape = Shape();
   ValueNotifier<Color> valueShapeColorNotifier = ValueNotifier(CDKTheme.black);
   ValueNotifier<Color> valuebackgroundColorNotifier =
       ValueNotifier(CDKTheme.transparent);
@@ -170,6 +172,21 @@ class AppData with ChangeNotifier {
     if (shapeSelected != -1) {
       getSelectedShape()?.setPosition(position);
       notifyListeners();
+    }
+  }
+
+  void copyToClipboard() {
+    if (shapeSelected != -1) {
+      copyShape = shapesList[shapeSelected];
+      Clipboard.setData(ClipboardData(text: copyShape.toMap().toString()));
+    }
+  }
+
+  void pasteFromClipboard() {
+    if (copyShape.vertices.length > 0) {
+      Shape shape = Shape.fromMap(copyShape.toMap());
+      shape.setPosition(shape.position + const Offset(10, 10));
+      actionManager.register(ActionAddNewShape(this, shape));
     }
   }
 }
