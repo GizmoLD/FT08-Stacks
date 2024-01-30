@@ -113,3 +113,47 @@ class ActionAddNewShape implements Action {
     appData.forceNotifyListeners();
   }
 }
+
+class ActionSetPositionShape implements Action {
+  final AppData appData;
+  final Shape shape;
+  final Offset previousPosition;
+  final Offset newPosition;
+
+  ActionSetPositionShape(
+      this.appData, this.shape, this.previousPosition, this.newPosition);
+
+  @override
+  void undo() {
+    shape.position = previousPosition;
+    appData.forceNotifyListeners();
+  }
+
+  @override
+  void redo() {
+    shape.position = newPosition;
+    appData.forceNotifyListeners();
+  }
+}
+
+class ActionSetShapeColor implements Action {
+  final AppData appData;
+  final Shape shape;
+  final Color previousColor;
+  final Color newColor;
+
+  ActionSetShapeColor(
+      this.appData, this.shape, this.previousColor, this.newColor);
+
+  @override
+  void undo() {
+    shape.strokeColor = previousColor;
+    appData.forceNotifyListeners();
+  }
+
+  @override
+  void redo() {
+    shape.strokeColor = newColor;
+    appData.forceNotifyListeners();
+  }
+}

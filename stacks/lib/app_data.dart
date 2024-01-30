@@ -123,6 +123,11 @@ class AppData with ChangeNotifier {
   //
   void setShapeColor(Color color) {
     if (shapeSelected >= 0 && shapeSelected < shapesList.length) {
+      actionManager.register(ActionSetShapeColor(
+          this,
+          shapesList[shapeSelected],
+          shapesList[shapeSelected].getColor(),
+          color));
       shapesList[shapeSelected].strokeColor = color;
       notifyListeners();
     }
@@ -170,6 +175,11 @@ class AppData with ChangeNotifier {
 
   void updateShapePosition(Offset position) {
     if (shapeSelected != -1) {
+      actionManager.register(ActionSetPositionShape(
+          this,
+          shapesList[shapeSelected],
+          shapesList[shapeSelected].position,
+          position));
       getSelectedShape()?.setPosition(position);
       notifyListeners();
     }
