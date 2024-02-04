@@ -124,7 +124,7 @@ class AppClickSelector {
     shape.strokeColor = Colors.black;
 
     // Dibuixa el poligon que s'està afegint
-    LayoutDesignPainter.paintShape(canvas, shape);
+    LayoutDesignPainter.paintShape(canvas, shape, appData);
 
     shape.strokeColor = tmpStroke;
 

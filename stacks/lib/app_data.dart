@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:editor_base/shape_set.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cupertino_desktop_kit/cdk.dart';
@@ -9,6 +15,7 @@ class AppData with ChangeNotifier {
   // Access appData globaly with:
   // AppData appData = Provider.of<AppData>(context);
   // AppData appData = Provider.of<AppData>(context, listen: false)
+  bool closeShape = false;
   ActionManager actionManager = ActionManager();
   bool isAltOptionKeyPressed = false;
   double zoom = 95;
@@ -97,6 +104,7 @@ class AppData with ChangeNotifier {
     newShape.strokeColor = valueShapeColorNotifier.value;
     newShape.setPosition(position);
     newShape.addPoint(const Offset(0, 0));
+    newShape.setClosed(closeShape);
     notifyListeners();
   }
 
@@ -120,7 +128,6 @@ class AppData with ChangeNotifier {
     notifyListeners();
   }
 
-  //
   void setShapeColor(Color color) {
     if (shapeSelected >= 0 && shapeSelected < shapesList.length) {
       actionManager.register(ActionSetShapeColor(
@@ -168,18 +175,17 @@ class AppData with ChangeNotifier {
 
   void setSelectedShapePosition(Offset position) {
     if (shapeSelected != -1) {
-      getSelectedShape()?.setPosition(position);
+      actionManager.register(ActionSetPositionShape(
+          this,
+          shapesList[shapeSelected],
+          shapesList[shapeSelected].position,
+          position));
       notifyListeners();
     }
   }
 
   void updateShapePosition(Offset position) {
     if (shapeSelected != -1) {
-      actionManager.register(ActionSetPositionShape(
-          this,
-          shapesList[shapeSelected],
-          shapesList[shapeSelected].position,
-          position));
       getSelectedShape()?.setPosition(position);
       notifyListeners();
     }
@@ -198,5 +204,61 @@ class AppData with ChangeNotifier {
       shape.setPosition(shape.position + const Offset(10, 10));
       actionManager.register(ActionAddNewShape(this, shape));
     }
+  }
+
+  void deleteSelectedShape() {
+    if (shapeSelected != -1) {
+      actionManager.register(
+          ActionDeleteShape(this, shapesList[shapeSelected], shapeSelected));
+      shapesList.removeAt(shapeSelected);
+      shapeSelected = -1;
+      notifyListeners();
+    }
+  }
+
+  void setCloseShape(bool value) {
+    closeShape = value;
+    if (shapeSelected > -1) {
+      shapesList[shapeSelected].closed = value;
+      //actionManager.register(ActionChangeClosed(this, shapeSelected, value));
+    }
+    notifyListeners();
+  }
+
+  void saveFile() async {
+    final directorio = await getApplicationDocumentsDirectory();
+    final rutaArchivo = '${directorio.path}/FT08-STACKS/mi_archivo.json';
+
+    // Crear una lista para almacenar los resultados de toMap().toString()
+    List<String> shapeStrings = [];
+
+    // Obtener las representaciones de cadena para cada Shape
+    for (Shape shape in shapesList) {
+      shapeStrings.add(shape.toMap().toString());
+    }
+
+    // Escribir las representaciones de cadena en el archivo
+    final File archivo = File(rutaArchivo);
+    await archivo.writeAsString(shapeStrings.join('\n'));
+    print('Datos guardados con éxito en: ${archivo.path}');
+  }
+
+  void exportAsSVG() async {
+    // Crear una instancia de ShapeSet con la lista actual de shapes
+    ShapeSet shapeSet = ShapeSet(shapesList);
+
+    // Obtener el código SVG como una cadena
+    String svgContent = shapeSet.toSVGString(docSize);
+
+    // Obtener el directorio de documentos de la aplicación
+    final directory = await getApplicationDocumentsDirectory();
+
+    // Crear la ruta completa del archivo SVG
+    final filePath = '${directory.path}/mi_archivo.svg';
+
+    // Escribir el código SVG en el archivo
+    await File(filePath).writeAsString(svgContent);
+
+    print('Archivo SVG exportado con éxito en: $filePath');
   }
 }

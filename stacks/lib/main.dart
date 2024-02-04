@@ -31,6 +31,9 @@ void main() async {
       bool isZPressed = event.logicalKey == LogicalKeyboardKey.keyZ;
       bool isCPressed = event.logicalKey == LogicalKeyboardKey.keyC;
       bool isVPressed = event.logicalKey == LogicalKeyboardKey.keyV;
+      bool isBackspacePressed =
+          event.logicalKey == LogicalKeyboardKey.backspace;
+      bool isDeletePressed = event.logicalKey == LogicalKeyboardKey.delete;
 
       if (event is RawKeyDownEvent) {
         if (isControlPressed && isZPressed && !isShiftPressed) {
@@ -45,7 +48,11 @@ void main() async {
         } else if (isVPressed && isControlPressed) {
           appData.pasteFromClipboard();
           return KeyEventResult.handled;
+        } else if (isBackspacePressed || isDeletePressed && isControlPressed) {
+          appData.deleteSelectedShape();
+          return KeyEventResult.handled;
         }
+
         if (event.logicalKey == LogicalKeyboardKey.altLeft) {
           appData.isAltOptionKeyPressed = true;
         }

@@ -49,6 +49,28 @@ class ActionManager {
   }
 }
 
+class ActionSetShapeColor implements Action {
+  final AppData appData;
+  final Shape shape;
+  final Color previousColor;
+  final Color newColor;
+
+  ActionSetShapeColor(
+      this.appData, this.shape, this.previousColor, this.newColor);
+
+  @override
+  void undo() {
+    shape.setStrokeColor(previousColor);
+    appData.forceNotifyListeners();
+  }
+
+  @override
+  void redo() {
+    shape.setStrokeColor(newColor);
+    appData.forceNotifyListeners();
+  }
+}
+
 class ActionSetDocWidth implements Action {
   final double previousValue;
   final double newValue;
@@ -126,34 +148,34 @@ class ActionSetPositionShape implements Action {
   @override
   void undo() {
     shape.position = previousPosition;
+    //appData.updateShapePosition(previousPosition);
     appData.forceNotifyListeners();
   }
 
   @override
   void redo() {
     shape.position = newPosition;
+    //appData.updateShapePosition(newPosition);
     appData.forceNotifyListeners();
   }
 }
 
-class ActionSetShapeColor implements Action {
+class ActionDeleteShape implements Action {
   final AppData appData;
   final Shape shape;
-  final Color previousColor;
-  final Color newColor;
+  final int index;
 
-  ActionSetShapeColor(
-      this.appData, this.shape, this.previousColor, this.newColor);
+  ActionDeleteShape(this.appData, this.shape, this.index);
 
   @override
   void undo() {
-    shape.strokeColor = previousColor;
+    appData.shapesList.insert(index, shape);
     appData.forceNotifyListeners();
   }
 
   @override
   void redo() {
-    shape.strokeColor = newColor;
+    appData.shapesList.removeAt(index);
     appData.forceNotifyListeners();
   }
 }

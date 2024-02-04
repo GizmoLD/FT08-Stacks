@@ -31,10 +31,37 @@ class LayoutSidebarFormat extends StatelessWidget {
               _buildStrokeWidthRow(labelsWidth, appData),
               const SizedBox(height: 8),
               _buildStrokeColorRow(labelsWidth, appData, context),
+              const SizedBox(height: 8),
+              _builderCheckBoxOpenClose(labelsWidth, appData, context),
               const SizedBox(height: 16),
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _builderCheckBoxOpenClose(
+      double labelsWidth, AppData appData, BuildContext context) {
+    return CupertinoFormRow(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildLabelContainer(labelsWidth, "Close shape"),
+          const SizedBox(width: 4),
+          SizedBox(
+            width: 15, // Ajusta este valor según tus necesidades
+            height: 15, // Ajusta este valor según tus necesidades
+            child: CDKButtonCheckBox(
+              value: appData.shapeSelected > -1
+                  ? appData.shapesList[appData.shapeSelected].closed
+                  : appData.closeShape,
+              onChanged: (value) {
+                appData.setCloseShape(value);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

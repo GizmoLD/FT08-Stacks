@@ -146,7 +146,7 @@ class LayoutDesignPainter extends CustomPainter {
     canvas.drawRect(rectRullerCorner, paintRulerTop);
   }
 
-  static void paintShape(Canvas canvas, Shape shape) {
+  static void paintShape(Canvas canvas, Shape shape, AppData appData) {
     if (shape.vertices.isNotEmpty) {
       Paint paint = Paint();
       paint.color = shape.strokeColor;
@@ -160,6 +160,9 @@ class LayoutDesignPainter extends CustomPainter {
         x = shape.position.dx + shape.vertices[i].dx;
         y = shape.position.dy + shape.vertices[i].dy;
         path.lineTo(x, y);
+      }
+      if (shape.closed) {
+        path.close();
       }
       canvas.drawPath(path, paint);
     }
@@ -211,13 +214,13 @@ class LayoutDesignPainter extends CustomPainter {
     if (appData.shapesList.isNotEmpty) {
       for (int i = 0; i < appData.shapesList.length; i++) {
         Shape shape = appData.shapesList[i];
-        paintShape(canvas, shape);
+        paintShape(canvas, shape, appData);
       }
     }
 
     // Dibuixa el poligon que s'està afegint (relatiu a la seva posició)
     Shape shape = appData.newShape;
-    paintShape(canvas, shape);
+    paintShape(canvas, shape, appData);
 
     // Restaura l'estat previ a l'escalat i translació
     canvas.restore();

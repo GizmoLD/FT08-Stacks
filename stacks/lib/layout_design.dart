@@ -22,6 +22,7 @@ class LayoutDesignState extends State<LayoutDesign> {
   final FocusNode _focusNode = FocusNode();
   Offset _dragStartPosition = Offset.zero;
   Offset _dragStartOffset = Offset.zero;
+  Offset newShapePosition = Offset.zero; // <-- NEW
 
   @override
   void initState() {
@@ -202,6 +203,7 @@ class LayoutDesignState extends State<LayoutDesign> {
                       },
                       onPointerUp: (event) {
                         _isMouseButtonPressed = false;
+
                         if (appData.toolSelected == "shape_drawing") {
                           appData.addNewShapeToShapesList();
                         }
@@ -219,6 +221,7 @@ class LayoutDesignState extends State<LayoutDesign> {
                               docPosition - _dragStartOffset;
                           if (_dragStartPosition != newShapePosition) {
                             appData.updateShapePosition(newShapePosition);
+                            appData.setSelectedShapePosition(newShapePosition);
                           }
                         }
 

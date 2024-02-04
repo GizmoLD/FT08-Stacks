@@ -7,11 +7,16 @@ class Shape {
   List<Offset> vertices = [];
   double strokeWidth = 1;
   Color strokeColor = const Color(0xFF000000);
+  bool closed = false;
 
   Shape();
 
   Color getColor() {
     return strokeColor;
+  }
+
+  void setClosed(bool close) {
+    closed = close;
   }
 
   void setPositionX(double x) {
@@ -129,5 +134,17 @@ class Shape {
 
   void setStrokeColor(Color color) {
     strokeColor = color;
+  }
+
+  String toSvgPath() {
+    final path = StringBuffer();
+    path.write('M ${position.dx} ${position.dy}');
+    for (var vertex in vertices) {
+      path.write(' L ${vertex.dx} ${vertex.dy}');
+    }
+    if (closed) {
+      path.write(' Z');
+    }
+    return path.toString();
   }
 }
