@@ -53,7 +53,9 @@ class LayoutSidebarDocumentState extends State<LayoutSidebarDocument> {
               const SizedBox(height: 16),
               _buildText("File actions:", fontBold),
               const SizedBox(height: 8),
-              _buildSaveFileRow("Load File:", labelsWidth),
+              _buildSaveFileRow("Load File", labelsWidth),
+              const SizedBox(height: 8),
+              _buildExportAsSVGRow("Export as SVG", labelsWidth),
             ],
           );
         },
@@ -72,7 +74,25 @@ class LayoutSidebarDocumentState extends State<LayoutSidebarDocument> {
             onPressed: () {
               appData.saveFile();
             },
-            child: Text('Load File'),
+            child: Text(label),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExportAsSVGRow(String label, double labelsWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          alignment: Alignment.centerRight,
+          width: labelsWidth,
+          child: CDKButton(
+            onPressed: () {
+              appData.exportAsSVG();
+            },
+            child: Text(label),
           ),
         ),
       ],

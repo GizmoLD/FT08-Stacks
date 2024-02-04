@@ -76,6 +76,7 @@ class Shape {
     return canvasOccupiedSize;
   }
 
+/*
   void normalizeSize(Size canvasSize) {
     Size boundingBoxSize = getBoundingBoxSize();
 
@@ -95,6 +96,36 @@ class Shape {
       }
 
       position = Offset(position.dx * scaleX, position.dy * scaleY);
+    }
+  }
+  */
+
+  void normalizeSize(Size canvasSize) {
+    Size boundingBoxSize = getBoundingBoxSize();
+
+    // Verifica si la bounding box tiene dimensiones no nulas
+    if (boundingBoxSize.width > 0 && boundingBoxSize.height > 0) {
+      // Define el tamaño deseado en el canvas
+      double desiredWidth = canvasSize.width / 2;
+      double desiredHeight = canvasSize.height / 2;
+
+      // Calcula los factores de escala necesarios para normalizar el tamaño
+      double scaleX = desiredWidth / boundingBoxSize.width;
+      double scaleY = desiredHeight / boundingBoxSize.height;
+
+      // Calcula la diferencia de posición después de aplicar la escala
+      double offsetX = (canvasSize.width - boundingBoxSize.width * scaleX) / 2;
+      double offsetY =
+          (canvasSize.height - boundingBoxSize.height * scaleY) / 2;
+
+      // Aplica la transformación de escala y ajuste de posición a cada vértice y la posición
+      for (int i = 0; i < vertices.length; i++) {
+        vertices[i] = Offset(vertices[i].dx * scaleX + offsetX,
+            vertices[i].dy * scaleY + offsetY);
+      }
+
+      position = Offset(
+          position.dx * scaleX + offsetX, position.dy * scaleY + offsetY);
     }
   }
 
@@ -136,11 +167,27 @@ class Shape {
     strokeColor = color;
   }
 
+/*
   String toSvgPath() {
     final path = StringBuffer();
     path.write('M ${position.dx} ${position.dy}');
     for (var vertex in vertices) {
-      path.write(' L ${vertex.dx} ${vertex.dy}');
+      if (vertex.dx != 0.0 && vertex.dy != 0.0) {
+        path.write(' L ${vertex.dx} ${vertex.dy}');
+      }
+    }
+    if (closed) {
+      path.write(' Z');
+    }
+    return path.toString();
+  }
+  */
+
+  String toSvgPath() {
+    final path = StringBuffer();
+    path.write('M ${position.dx} ${position.dy}');
+    for (var vertex in vertices) {
+      path.write(' L ${position.dx + vertex.dx} ${position.dy + vertex.dy}');
     }
     if (closed) {
       path.write(' Z');

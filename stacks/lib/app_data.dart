@@ -254,7 +254,7 @@ class AppData with ChangeNotifier {
     final directory = await getApplicationDocumentsDirectory();
 
     // Crear la ruta completa del archivo SVG
-    final filePath = '${directory.path}/mi_archivo.svg';
+    final filePath = '${directory.path}/FT08-STACKS/mi_archivo.svg';
 
     // Escribir el código SVG en el archivo
     await File(filePath).writeAsString(svgContent);
