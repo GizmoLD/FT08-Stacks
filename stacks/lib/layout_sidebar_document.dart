@@ -53,7 +53,7 @@ class LayoutSidebarDocumentState extends State<LayoutSidebarDocument> {
               const SizedBox(height: 16),
               _buildText("File actions:", fontBold),
               const SizedBox(height: 8),
-              _buildSaveFileRow("Load File", labelsWidth),
+              _buildSaveFileRow("Save", labelsWidth),
               const SizedBox(height: 8),
               _buildExportAsSVGRow("Export as SVG", labelsWidth),
             ],
